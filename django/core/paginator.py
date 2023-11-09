@@ -30,12 +30,14 @@ class Paginator:
     ELLIPSIS = _('…')
 
     def __init__(self, object_list, per_page, orphans=0,
-                 allow_empty_first_page=True):
+                 allow_empty_first_page=True, count=None):
         self.object_list = object_list
         self._check_object_list_is_ordered()
         self.per_page = int(per_page)
         self.orphans = int(orphans)
         self.allow_empty_first_page = allow_empty_first_page
+        if count:
+            self.count = count
 
     def __iter__(self):
         for page_number in self.page_range:
