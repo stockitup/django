@@ -52,7 +52,9 @@ if "install" in sys.argv:
             break
 
 
-setup()
+setup(
+    version='3.2.24'
+)
 
 
 if overlay_warning:
