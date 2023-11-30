@@ -228,6 +228,8 @@ class Page(collections.abc.Sequence):
     def visible_pages(self):
         current_page = self.number
         total_pages = self.paginator.num_pages
+        if total_pages == 0:
+            return []
         visible_pages = [(current_page, True)]
         pages_before_possible = current_page - 1
         pages_after_possible = total_pages - current_page
@@ -248,11 +250,11 @@ class Page(collections.abc.Sequence):
             add_page = current_page + page_after
             visible_pages = visible_pages + [(add_page, False)]
         if visible_pages[0][0] != 1:
-            if visible_pages[1][0] != 2:
+            if visible_pages[0][0] != 2:
                 visible_pages = [(False, False)] + visible_pages
             visible_pages = [(1, False)] + visible_pages
         if visible_pages[-1][0] != total_pages:
-            if visible_pages[-2][0] != total_pages - 1:
+            if visible_pages[-1][0] != total_pages - 1:
                 visible_pages = visible_pages + [(False, False)]
             visible_pages = visible_pages + [(total_pages, False)]
 
