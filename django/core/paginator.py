@@ -224,3 +224,36 @@ class Page(collections.abc.Sequence):
         if self.number == self.paginator.num_pages:
             return self.paginator.count
         return self.number * self.paginator.per_page
+
+    def visible_pages(self):
+        current_page = self.number
+        total_pages = self.paginator.num_pages
+        visible_pages = [(current_page, True)]
+        pages_before_possible = current_page - 1
+        pages_after_possible = total_pages - current_page
+
+        pages_before_used = min(pages_before_possible, 2)
+        pages_after_used = min(pages_after_possible, 2)
+
+        extra_before_pages = min(2 - pages_after_used, pages_before_possible-pages_before_used)
+        extra_after_pages = min(2 - pages_before_used, pages_after_possible-pages_after_used)
+
+        pages_before = pages_before_used + extra_before_pages
+        pages_after = pages_after_used + extra_after_pages
+
+        for page_before in range(1, pages_before+1):
+            add_page = current_page - page_before
+            visible_pages = [(add_page, False)] + visible_pages
+        for page_after in range(1, pages_after+1):
+            add_page = current_page + page_after
+            visible_pages = visible_pages + [(add_page, False)]
+        if visible_pages[0][0] != 1:
+            if visible_pages[1][0] != 2:
+                visible_pages = [(False, False)] + visible_pages
+            visible_pages = [(1, False)] + visible_pages
+        if visible_pages[-1][0] != total_pages:
+            if visible_pages[-2][0] != total_pages - 1:
+                visible_pages = visible_pages + [(False, False)]
+            visible_pages = visible_pages + [(total_pages, False)]
+
+        return visible_pages
