@@ -931,7 +931,7 @@ class NodeList(list):
     # extend_nodelist().
     contains_nontext = False
 
-    def render(self, context):
+    def render(self, context, name=''):
         bits = []
         if 'request' in context and context['request'].GET.get('TTT', 0) == "1":
             bits = [name]
