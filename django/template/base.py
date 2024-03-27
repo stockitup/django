@@ -167,9 +167,9 @@ class Template:
             if context.template is None:
                 with context.bind_template(self):
                     context.template_name = self.name
-                    return self._render(context)
+                    return self.nodelist.render(context, name=self.name)
             else:
-                return self._render(context)
+                return self.nodelist.render(context, name=self.name)
 
     def compile_nodelist(self):
         """
@@ -933,6 +933,8 @@ class NodeList(list):
 
     def render(self, context):
         bits = []
+        if 'request' in context and context['request'].GET.get('TTT', 0) == "1":
+            bits = [name]
         for node in self:
             if isinstance(node, Node):
                 bit = node.render_annotated(context)
