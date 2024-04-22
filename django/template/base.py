@@ -933,7 +933,7 @@ class NodeList(list):
 
     def render(self, context, name=''):
         bits = []
-        if 'request' in context and context['request'].GET.get('TTT', 0) == "1":
+        if 'request' in context and context['request'].GET.get('TTT', 0) == "1" and name != None:
             bits = [name]
         for node in self:
             if isinstance(node, Node):
