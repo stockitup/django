@@ -48,7 +48,8 @@ class Loader(BaseLoader):
 
         from django_rq import get_connection
         redis_connection = get_connection()
-        if redis_connection.getdel('siu:system:RELOAD_TEMPLATES'):
+        if redis_connection.get('siu:system:RELOAD_TEMPLATES'):
+            redis_connection.delete('siu:system:RELOAD_TEMPLATES')
             self.get_template_cache = {}
 
         key = self.cache_key(template_name, skip)
