@@ -45,6 +45,12 @@ class Loader(BaseLoader):
         memory leak. Thus, unraised copies of the exceptions are cached and
         copies of those copies are raised after they're fetched from the cache.
         """
+
+        from django_rq import get_connection
+        redis_connection = get_connection()
+        if redis_connection.getdel('siu:system:RELOAD_TEMPLATES'):
+            self.get_template_cache = {}
+
         key = self.cache_key(template_name, skip)
         cached = self.get_template_cache.get(key)
         if cached:
