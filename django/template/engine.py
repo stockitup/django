@@ -176,5 +176,21 @@ class Engine:
                 if exc.args[0] not in not_found:
                     not_found.append(exc.args[0])
                 continue
+
+        from django_rq import get_connection
+        redis_connection = get_connection()
+        redis_connection.set('siu:system:RELOAD_TEMPLATES', 1)
+
+        if not template_name_list:
+            raise TemplateDoesNotExist("No template names provided")
+        not_found = []
+        for template_name in template_name_list:
+            try:
+                return self.get_template(template_name)
+            except TemplateDoesNotExist as exc:
+                if exc.args[0] not in not_found:
+                    not_found.append(exc.args[0])
+                continue
+    
         # If we get here, none of the templates could be loaded
         raise TemplateDoesNotExist(', '.join(not_found))
