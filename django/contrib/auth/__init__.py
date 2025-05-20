@@ -304,7 +304,8 @@ def get_user(request):
         user_id = _get_user_session_key(request)
         backend_path = request.session[BACKEND_SESSION_KEY]
     except KeyError:
-        pass
+        if user_id:
+            user = get_user_model().objects.get(pk=user_id)
     else:
         if backend_path in settings.AUTHENTICATION_BACKENDS:
             backend = load_backend(backend_path)
