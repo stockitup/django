@@ -300,6 +300,7 @@ def get_user(request):
     from .models import AnonymousUser
 
     user = None
+    user_id = None
     try:
         user_id = _get_user_session_key(request)
         backend_path = request.session[BACKEND_SESSION_KEY]
